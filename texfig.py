@@ -10,6 +10,7 @@ mpl.use('pgf')
 from math import sqrt
 default_width = 5.78853 # in inches
 default_ratio = (sqrt(5.0) - 1.0) / 2.0 # golden mean
+default_figure_types = ['pdf', 'pgf']
 
 mpl.rcParams.update({
     "text.usetex": True,
@@ -59,6 +60,12 @@ def subplots(width=default_width, ratio=default_ratio, *args, **kwargs):
 """
 Save both a PDF and a PGF file with the given filename.
 """
-def savefig(filename, *args, **kwargs):
-    plt.savefig(filename + '.pdf', *args, **kwargs)
-    plt.savefig(filename + '.pgf', *args, **kwargs)
+def savefig(filename, *args, fig=None, types=None, **kwargs):
+    if types is None:
+        types = default_figure_types
+    if fig is None:
+        for ext in types:
+            plt.savefig(filename + '.' + ext, *args, **kwargs)
+    else:
+        for ext in types:
+            fig.savefig(filename + '.' + ext, *args, **kwargs)
